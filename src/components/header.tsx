@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -10,15 +10,16 @@ import {
 import { Menu, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Cart } from '@/components/cart';
-import { Logo } from '@/components/logo';
+import Image from 'next/image';
+import { currentUser } from '@clerk/nextjs/server';
 
-export function Header() {
+export async function Header() {
+  const user = await currentUser();
   return (
     <header className='bg-background sticky top-0 z-20'>
       <div className='mx-auto flex h-16 max-w-screen-xl items-center gap-4 px-4'>
         <div className='mr-7 flex items-center gap-3'>
           <Sidebar />
-          <Logo className='size-8' />
           <Link
             href='/'
             className='flex items-center gap-2 px-2 text-xl font-bold tracking-tighter'
@@ -27,14 +28,51 @@ export function Header() {
           </Link>
         </div>
         <nav className='text-muted-foreground hover:[&_a]:text-foreground hidden items-center gap-6 text-sm font-medium md:flex [&_a]:transition-colors'>
-          <Link href='#'>Women</Link>
-          <Link href='#'>Men</Link>
-          <Link href='#'>Kids</Link>
-          <Link href='#'>Accessories</Link>
+          <Link href='#'>Docs</Link>
+          <Link href='#'>Courses</Link>
+          <Link href='#'>Premium</Link>
         </nav>
         <div className='ml-auto flex items-center gap-2'>
-          <SearchBar className='hidden sm:block' />
-          <Cart />
+          <>
+            {user ? (
+              <div className='sm:flex sm:items-center sm:space-x-4'>
+                <Cart />
+                <Link
+                  href={`/profile/${user.id}`}
+                  className='hidden hover:brightness-95 shrink-0 transition sm:block'
+                >
+                  <Image
+                    src={
+                      user.imageUrl ||
+                      `https://avatar.vercel.sh/${user.fullName}.svg`
+                    }
+                    alt='Picture'
+                    width={36}
+                    height={36}
+                    className='rounded-full'
+                  />
+                </Link>
+                <div className='text-xs hidden sm:block font-medium'>
+                  Hi! {user.firstName ? user.firstName : 'user'} 👋
+                </div>
+              </div>
+            ) : (
+              <div className='sm:flex sm:gap-4'>
+                <Link
+                  href='/sign-in'
+                  className={buttonVariants({ variant: 'outline' })}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href='/sign-up'
+                  className={buttonVariants({ className: 'hidden sm:block' })}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </>
         </div>
       </div>
     </header>

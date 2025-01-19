@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/header';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import Footer from '@/components/footer';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -25,15 +27,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} flex min-h-svh flex-col antialiased`}
-      >
-        <TooltipProvider delayDuration={0}>
-          <Header />
-          <main className='flex-1'>{children}</main>
-        </TooltipProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang='en'>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} flex min-h-svh flex-col antialiased`}
+        >
+          <TooltipProvider delayDuration={0}>
+            <Header />
+            <main className='flex-1'>{children}</main>
+            <Footer />
+          </TooltipProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

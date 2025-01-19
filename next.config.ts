@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'files.stripe.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        port: '',
+      },
     ],
   },
 };

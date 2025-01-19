@@ -1,14 +1,26 @@
+import Ripple from './ui/ripple';
+import { TextEffect } from './ui/text-effect';
+
 export function Hero() {
   return (
-    <div className='from-muted/20 to-muted/50 relative flex h-96 w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-b'>
-      <div className='z-10 flex h-full flex-col items-center justify-center gap-2 p-8 text-center'>
-        <h1 className='text-4xl font-bold tracking-tight'>
-          Spring 2025 Collection
-        </h1>
-        <p className='text-muted-foreground mb-4 text-lg'>
-          Shop our latest collection of essential items for the season.
-        </p>
+    <section className='relative isolate overflow-hidden min-h-[calc(100dvh-4rem)] place-content-center py-24 sm:py-32'>
+      <div className='mx-auto max-w-3xl px-4 sm:px-6'>
+        <div className='mx-auto max-w-2xl text-center space-y-4'>
+          <h1 className='text-5xl font-semibold tracking-tight sm:text-7xl'>
+            Learn & Grow ✨
+          </h1>
+          <TextEffect
+            className='text-pretty text-lg font-medium sm:text-xl/8'
+            preset='fade-in-blur'
+            speedReveal={0.7}
+            speedSegment={0.3}
+          >
+            Explore thousands of high-quality courses taught by industry
+            experts. Start your learning journey with Ripple today.
+          </TextEffect>
+        </div>
       </div>
-    </div>
+      <Ripple />
+    </section>
   );
 }
