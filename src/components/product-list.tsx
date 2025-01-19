@@ -3,18 +3,51 @@ import {
   ProductListThumbnail,
   ProductListThumbnailSkeleton,
 } from '@/components/product-list-thumbnail';
+import { productListSchema } from '@/lib/schema';
 import Link from 'next/link';
+import { z } from 'zod';
+import { AnimatedGroup } from './ui/animated-group';
 
-export function ProductList() {
+export function ProductList({
+  list,
+}: {
+  list: z.infer<typeof productListSchema>;
+}) {
   return (
-    <div className='relative mb-8 flex flex-col items-center gap-8'>
+    <div className='mb-8 flex flex-col items-center gap-8'>
       {list.data.length > 0 ? (
         <>
-          <div className='grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
+          <AnimatedGroup
+            className='grid grid-cols-1 sm:grid-cols-2 gap-6'
+            variants={{
+              container: {
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.05,
+                  },
+                },
+              },
+              item: {
+                hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: 'blur(0px)',
+                  transition: {
+                    duration: 1.2,
+                    type: 'spring',
+                    bounce: 0.3,
+                  },
+                },
+              },
+            }}
+          >
             {list.data.map((product) => (
-              <ProductListThumbnail key={product.id} />
+              <ProductListThumbnail key={product.id} product={product} />
             ))}
-          </div>
+          </AnimatedGroup>
           <Button asChild size='sm' variant='outline'>
             <Link href='#'>View all products</Link>
           </Button>
@@ -45,16 +78,3 @@ export function ProductList() {
     </div>
   );
 }
-const list = {
-  data: [
-    {
-      id: 1,
-      name: 'Sample Product',
-      images: ['/sample-image.jpg'],
-      price: {
-        display_amount: '$99.99',
-        id: 'price_12345',
-      },
-    },
-  ],
-};
